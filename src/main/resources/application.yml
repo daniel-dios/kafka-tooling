@@ -6,13 +6,13 @@ spring:
           ##brokers: ${KAFKA_HOST}:${KAFKA_PORT}
           brokers: localhost:9092
       bindings:
-        messageConsumer-in-0:
+        consumer-in-0:
           consumer:
             partitioned: true
             maxAttempts: 1
           group: kafkapingpong
           destination: "dlq"
-        dlqProducer-out-0:
+        producer-out-0:
           destination: "dlq"
       function:
         definition: producer;consumer
