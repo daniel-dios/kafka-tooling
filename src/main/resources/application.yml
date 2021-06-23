@@ -1,0 +1,30 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          ##brokers: ${KAFKA_HOST}:${KAFKA_PORT}
+          brokers: localhost:9092
+      bindings:
+        messageConsumer-in-0:
+          consumer:
+            partitioned: true
+            maxAttempts: 1
+          group: kafkapingpong
+          destination: "dlq"
+        dlqProducer-out-0:
+          destination: "dlq"
+      function:
+        definition: producer;consumer
+
+server:
+  port: 8000
+  compression:
+    enabled: true
+    mime-types: application/json
+  tomcat:
+    connection-timeout: 5s
+
+logging:
+  level:
+    ROOT: INFO
