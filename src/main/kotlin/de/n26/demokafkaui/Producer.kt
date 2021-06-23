@@ -18,6 +18,7 @@ class Producer : Supplier<Flux<MessageOut>> {
     @Scheduled(fixedDelay = 1000, initialDelay = 5000)
     fun sendHello() {
         synchronized(sink) {
+            com.demokafkaui.he
             sink.emitNext(MessageOut(message = "hello!", time = now().toString()), FAIL_FAST)
         }
     }

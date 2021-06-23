@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "com.demokafkaui";
+option java_outer_classname = "hello";
+option java_multiple_files = true;
+
+
+message helloMessage {
+    string foo = 1;
+}
