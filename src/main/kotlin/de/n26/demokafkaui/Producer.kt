@@ -17,7 +17,7 @@ class Producer : Supplier<Flux<ByteArray>> {
 
     @Scheduled(fixedDelay = 1000, initialDelay = 5000)
     fun sendHello() {
-        val build = Hello.userTransaction
+        val message = Transactions.userTransaction
             .newBuilder()
             .setUserId(UUID.randomUUID().toString())
             .setAmount(nextInt(-100, 100))
@@ -25,7 +25,7 @@ class Producer : Supplier<Flux<ByteArray>> {
             .build()
 
         synchronized(sink) {
-            sink.emitNext(build.toByteArray(), FAIL_FAST)
+            sink.emitNext(message.toByteArray(), FAIL_FAST)
         }
     }
 

@@ -1,0 +1,12 @@
+
+kafka:
+  protobuf:
+    enabled: true
+    mappings:
+      - topicName: transactions
+        valueProtoType: de.n26.demokafkaui.Transactions.userTransaction
+    fileSystem:
+      enabled: true
+      refreshInterval: 5m
+      paths:
+        - /etc/protos

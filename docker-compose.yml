@@ -40,7 +40,9 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
 
   kowl:
-    image: quay.io/cloudhut/kowl:v1.3.1
+    build:
+      context: .
+      dockerfile: Dockerfile-kowl
     container_name: kowl
     restart: always
     ports:

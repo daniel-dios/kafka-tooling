@@ -11,9 +11,9 @@ spring:
             partitioned: true
             maxAttempts: 1
           group: kafkapingpong
-          destination: "dlq"
+          destination: "transactions"
         producer-out-0:
-          destination: "dlq"
+          destination: "transactions"
       function:
         definition: producer;consumer
 
