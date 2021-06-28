@@ -2,11 +2,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.google.protobuf.gradle.protoc
 
 plugins {
+	idea
 	id("org.springframework.boot") version "2.6.0-SNAPSHOT"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	kotlin("jvm") version "1.5.10"
 	kotlin("plugin.spring") version "1.5.10"
-
 	id("com.google.protobuf") version "0.8.16"
 }
 
@@ -56,7 +56,9 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
+
 protobuf {
+
 	protobuf.protoc {
 		artifact = "com.google.protobuf:protoc:3.0.0"
 	}

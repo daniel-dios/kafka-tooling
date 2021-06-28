@@ -1,10 +1,7 @@
 syntax = "proto3";
 
-option java_package = "com.demokafkaui";
-option java_outer_classname = "hello";
-option java_multiple_files = true;
+package de.n26.demokafkaui;
 
-
-message helloMessage {
+message wussup {
     string foo = 1;
 }
