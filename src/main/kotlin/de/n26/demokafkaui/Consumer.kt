@@ -7,6 +7,6 @@ class Consumer : Consumer<ByteArray> {
     private val logger = LoggerFactory.getLogger(Consumer::class.java)
 
     override fun accept(bytes: ByteArray) {
-        logger.info("Received: {}", Hello.wussup.parseFrom(bytes))
+        logger.info("Received: {}", Hello.userTransaction.parseFrom(bytes))
     }
 }

@@ -2,6 +2,14 @@ syntax = "proto3";
 
 package de.n26.demokafkaui;
 
-message wussup {
-    string foo = 1;
+import "google/protobuf/timestamp.proto";
+
+message userTransaction {
+
+  string userId = 1;
+
+  google.protobuf.Timestamp at = 2;
+
+  int32 amount = 3;
+
 }
