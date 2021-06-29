@@ -4,7 +4,7 @@ kafka:
     enabled: true
     mappings:
       - topicName: transactions
-        valueProtoType: de.n26.demokafkaui.Transactions.userTransaction
+        valueProtoType: de.n26.demokafkaui.userTransaction
     fileSystem:
       enabled: true
       refreshInterval: 5m
