@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package de.n26.demokafkaui;
+
+import "google/protobuf/timestamp.proto";
+
+message userTransaction {
+
+  string userId = 1;
+
+  google.protobuf.Timestamp at = 2;
+
+  int32 amount = 3;
+
+}

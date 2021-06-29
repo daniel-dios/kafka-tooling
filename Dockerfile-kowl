@@ -1,0 +1,7 @@
+FROM quay.io/cloudhut/kowl:v1.4.0
+
+COPY kowl.yml /config/kowl.yml
+
+ENV CONFIG_FILEPATH=/config/kowl.yml
+
+COPY src/main/proto /etc/protos
