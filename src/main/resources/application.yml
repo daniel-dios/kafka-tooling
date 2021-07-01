@@ -15,8 +15,7 @@ spring:
     consumer:
       bootstrap-servers:
         - localhost:9092
+      group-id: "foo"
     producer:
       bootstrap-servers:
         - localhost:9092
-    bootstrap-servers:
-      - localhost:9092
