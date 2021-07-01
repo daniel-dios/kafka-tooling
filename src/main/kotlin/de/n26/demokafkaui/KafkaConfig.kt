@@ -5,6 +5,8 @@ import com.github.daniel.shuy.kafka.protobuf.serde.KafkaProtobufSerializer
 import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,10 +17,16 @@ import org.springframework.kafka.core.*
 class KafkaConfig {
 
     @Bean
-    fun producer(topic: NewTopic, template: KafkaTemplate<String, Transactions.userTransaction>) = Producer(topic, template)
+    fun producer(
+        @Qualifier("transactionsTopic") topic: NewTopic,
+        template: KafkaTemplate<String, Transactions.userTransaction>
+    ) = Producer(topic, template)
 
-    @Bean
-    fun topic1(): NewTopic = NewTopic("transactions", 1, 1.toShort())
+    @Bean(name = ["transactionsTopic"])
+    fun transactionsTopic(
+        @Value("\${topics.transactions.name}") name: String,
+        @Value("\${topics.transactions.partitions}") partitions: String,
+    ): NewTopic = NewTopic(name, partitions.toInt(), partitions.toShort())
 
     @Bean
     fun producerFactory(

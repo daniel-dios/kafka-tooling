@@ -19,3 +19,8 @@ spring:
     producer:
       bootstrap-servers:
         - localhost:9092
+
+topics:
+  transactions:
+    name: "transactions"
+    partitions: "6"
