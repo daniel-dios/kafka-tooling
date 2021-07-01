@@ -1,22 +1,21 @@
 package de.n26.demokafkaui
 
 import com.google.protobuf.Timestamp
-import org.springframework.beans.factory.annotation.Autowired
+import org.apache.kafka.clients.admin.NewTopic
+import org.apache.kafka.common.internals.Topic
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.support.KafkaHeaders.MESSAGE_KEY
 import org.springframework.messaging.Message
 import org.springframework.messaging.support.MessageBuilder
 import org.springframework.scheduling.annotation.Scheduled
-import org.springframework.stereotype.Component
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 import kotlin.random.Random.Default.nextInt
 
-@Component
-class Producer {
-
-    @Autowired
-    private lateinit var kafkaTemplate: KafkaTemplate<String, Transactions.userTransaction>
+class Producer(
+    private val topic: NewTopic,
+    private val kafkaTemplate: KafkaTemplate<String, Transactions.userTransaction>
+) {
 
     @Scheduled(fixedDelay = 1000, initialDelay = 5000)
     fun sendHello() {
@@ -32,7 +31,7 @@ class Producer {
             .setHeader(MESSAGE_KEY, userTransactionProto.userId.toByteArray())
             .build()
 
-        kafkaTemplate.send("transactions", userTransactionProto)
+        kafkaTemplate.send(topic.name(), userTransactionProto)
     }
 
     private fun Instant.toProtoTimestamp() = Timestamp
