@@ -26,12 +26,7 @@ class Producer(
             .setAt(Instant.now().toProtoTimestamp())
             .build()
 
-        val springMessage: Message<ByteArray> = MessageBuilder
-            .withPayload(userTransactionProto.toByteArray())
-            .setHeader(MESSAGE_KEY, userTransactionProto.userId.toByteArray())
-            .build()
-
-        kafkaTemplate.send(topic.name(), userTransactionProto)
+        kafkaTemplate.send(topic.name(), userTransactionProto.userId, userTransactionProto)
     }
 
     private fun Instant.toProtoTimestamp() = Timestamp
