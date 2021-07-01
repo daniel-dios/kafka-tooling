@@ -41,6 +41,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 
 	implementation("com.google.protobuf:protobuf-java:3.6.1")
+	implementation("com.github.daniel-shuy:kafka-protobuf-serde:2.2.0")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

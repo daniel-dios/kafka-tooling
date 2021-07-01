@@ -1,22 +1,20 @@
 package de.n26.demokafkaui
 
 import com.google.protobuf.Timestamp
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.support.KafkaHeaders.MESSAGE_KEY
 import org.springframework.messaging.Message
 import org.springframework.messaging.support.MessageBuilder
 import org.springframework.scheduling.annotation.Scheduled
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Sinks
-import reactor.core.publisher.Sinks.EmitFailureHandler.FAIL_FAST
-import reactor.core.publisher.Sinks.Many
 import java.time.Instant
 import java.util.UUID
-import java.util.function.Supplier
 import kotlin.random.Random.Default.nextInt
 
-class Producer : Supplier<Flux<Message<ByteArray>>> {
+class Producer {
 
-    private val sink: Many<Message<ByteArray>> = Sinks.many().unicast().onBackpressureBuffer()
+    @Autowired
+    private lateinit var kafkaTemplate: KafkaTemplate<String, Transactions.userTransaction>
 
     @Scheduled(fixedDelay = 1000, initialDelay = 5000)
     fun sendHello() {
@@ -32,12 +30,8 @@ class Producer : Supplier<Flux<Message<ByteArray>>> {
             .setHeader(MESSAGE_KEY, userTransactionProto.userId.toByteArray())
             .build()
 
-        synchronized(sink) {
-            sink.emitNext(springMessage, FAIL_FAST)
-        }
+        kafkaTemplate.send("transactions", userTransactionProto)
     }
-
-    override fun get(): Flux<Message<ByteArray>> = sink.asFlux()
 
     private fun Instant.toProtoTimestamp() = Timestamp
         .newBuilder()

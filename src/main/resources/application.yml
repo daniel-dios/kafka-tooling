@@ -1,22 +1,3 @@
-spring:
-  cloud:
-    stream:
-      kafka:
-        binder:
-          ##brokers: ${KAFKA_HOST}:${KAFKA_PORT}
-          brokers: localhost:9092
-      bindings:
-        consumer-in-0:
-          consumer:
-            partitioned: true
-            maxAttempts: 1
-          group: kafkapingpong
-          destination: "transactions"
-        producer-out-0:
-          destination: "transactions"
-      function:
-        definition: producer;consumer
-
 server:
   port: 8000
   compression:
@@ -28,3 +9,14 @@ server:
 logging:
   level:
     ROOT: INFO
+
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers:
+        - localhost:9092
+    producer:
+      bootstrap-servers:
+        - localhost:9092
+    bootstrap-servers:
+      - localhost:9092
