@@ -1,5 +1,6 @@
-package de.n26.demokafkaui
+package de.n26.demokafkaui.consumer
 
+import de.n26.demokafkaui.Transactions
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.support.KafkaHeaders
