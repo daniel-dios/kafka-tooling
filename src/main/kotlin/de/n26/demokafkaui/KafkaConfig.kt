@@ -1,4 +1,4 @@
-package de.n26.demokafkaui.config
+package de.n26.demokafkaui
 
 import com.github.daniel.shuy.kafka.protobuf.serde.KafkaProtobufDeserializer
 import com.github.daniel.shuy.kafka.protobuf.serde.KafkaProtobufSerializer
@@ -20,21 +20,16 @@ import org.springframework.kafka.core.*
 class KafkaConfig {
 
     @Bean
-    fun topic1(): NewTopic {
-        return NewTopic("transactions", 1, 1.toShort())
-    }
+    fun topic1(): NewTopic = NewTopic("transactions", 1, 1.toShort())
 
     @Bean
     fun producerFactory(
         kafkaProperties: KafkaProperties
-    ): ProducerFactory<String, Transactions.userTransaction> {
-
-        return DefaultKafkaProducerFactory(
-            kafkaProperties.buildProducerProperties(),
-            StringSerializer(),
-            KafkaProtobufSerializer()
-        )
-    }
+    ): ProducerFactory<String, Transactions.userTransaction> = DefaultKafkaProducerFactory(
+        kafkaProperties.buildProducerProperties(),
+        StringSerializer(),
+        KafkaProtobufSerializer()
+    )
 
     @Bean
     fun kafkaTemplate(producerFactory: ProducerFactory<String, Transactions.userTransaction>) =
@@ -43,13 +38,11 @@ class KafkaConfig {
     @Bean
     fun consumerFactory(
         kafkaProperties: KafkaProperties
-    ): ConsumerFactory<String?, Transactions.userTransaction?> {
-        return DefaultKafkaConsumerFactory(
-            kafkaProperties.buildConsumerProperties(),
-            StringDeserializer(),
-            KafkaProtobufDeserializer(Transactions.userTransaction.parser())
-        )
-    }
+    ): ConsumerFactory<String?, Transactions.userTransaction?> = DefaultKafkaConsumerFactory(
+        kafkaProperties.buildConsumerProperties(),
+        StringDeserializer(),
+        KafkaProtobufDeserializer(Transactions.userTransaction.parser())
+    )
 
     @Bean
     fun kafkaListenerContainerFactory(

@@ -5,8 +5,10 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.support.KafkaHeaders
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.messaging.handler.annotation.Payload
+import org.springframework.stereotype.Component
 import java.util.function.Consumer
 
+@Component
 class Consumer {
     private val logger = LoggerFactory.getLogger(Consumer::class.java)
 

@@ -7,10 +7,12 @@ import org.springframework.kafka.support.KafkaHeaders.MESSAGE_KEY
 import org.springframework.messaging.Message
 import org.springframework.messaging.support.MessageBuilder
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.UUID
 import kotlin.random.Random.Default.nextInt
 
+@Component
 class Producer {
 
     @Autowired
