@@ -15,10 +15,10 @@ spring:
     consumer:
       bootstrap-servers:
         - localhost:9092
+        - localhost:7070
       group-id: "foo"
     producer:
-      bootstrap-servers:
-        - localhost:9092
+      bootstrap-servers: "localhost:9092,localhost:8081"
 
 topics:
   transactions:
