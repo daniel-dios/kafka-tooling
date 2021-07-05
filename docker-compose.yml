@@ -68,4 +68,13 @@ services:
     environment:
       - KAFKA_BROKERS=kafka:29092
 
-
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    depends_on:
+      - kafka
+    ports:
+    - "9000:9000"
+    environment:
+      JVM_OPTS: "-Xms32M -Xmx64M"
+      SERVER_SERVLET_CONTEXTPATH: "/"
+      KAFKA_BROKERCONNECT: "kafka:29092"
