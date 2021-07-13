@@ -4,12 +4,13 @@ package de.n26.demokafkaui;
 
 import "google/protobuf/timestamp.proto";
 
-message userTransaction {
+option java_multiple_files = true;
+
+message UserTransaction {
 
   string userId = 1;
 
   google.protobuf.Timestamp at = 2;
 
   int32 amount = 3;
-
 }

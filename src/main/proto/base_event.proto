@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package de.n26.demokafkaui;
+
+import "google/protobuf/any.proto";
+
+option java_multiple_files = true;
+
+enum Producer {
+    UNKNOWN_PRODUCER = 0;
+    SERVICE_A = 1;
+    SERVICE_B = 2;
+}
+
+message BaseEvent {
+    string eventId = 1; // UUID version 4 generated on the publisher side
+    int64 eventTimestamp = 2; // UTC epoch in millis
+    google.protobuf.Any event = 3;
+    Producer producer = 4;
+}

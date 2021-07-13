@@ -1,5 +1,6 @@
+import com.google.protobuf.gradle.ofSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import com.google.protobuf.gradle.protoc
+import com.google.protobuf.gradle.*
 
 plugins {
     idea
@@ -32,7 +33,8 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka:2.7.3")
 
     // proto
-    implementation("com.google.protobuf:protobuf-java:3.6.1")
+    implementation("com.google.protobuf:protobuf-java:3.17.3")
+    implementation("com.google.protobuf:protobuf-java-util:3.17.3")
 
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -51,8 +53,16 @@ tasks.withType<Test> {
 
 
 protobuf {
-
-    protobuf.protoc {
+    protoc {
         artifact = "com.google.protobuf:protoc:3.0.0"
+    }
+
+    generateProtoTasks {
+        ofSourceSet("main").forEach { task ->
+            task.generateDescriptorSet = true
+            task.descriptorSetOptions.path = "${projectDir}/build/descriptors/${task.sourceSet.name}.desc"
+            task.descriptorSetOptions.includeSourceInfo = true
+            task.descriptorSetOptions.includeImports = true
+        }
     }
 }
