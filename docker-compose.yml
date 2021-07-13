@@ -1,4 +1,5 @@
 version: '3.9'
+
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:6.0.2
@@ -69,12 +70,17 @@ services:
       - KAFKA_BROKERS=kafka:29092
 
   kafdrop:
-    image: obsidiandynamics/kafdrop
-    depends_on:
-      - kafka
+    image: obsidiandynamics/kafdrop:3.28.0-SNAPSHOT
+    restart: "always"
     ports:
-    - "9000:9000"
+      - "9000:9000"
     environment:
-      JVM_OPTS: "-Xms32M -Xmx64M"
-      SERVER_SERVLET_CONTEXTPATH: "/"
       KAFKA_BROKERCONNECT: "kafka:29092"
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+      CMD_ARGS: "--message.format=PROTOBUF --protobufdesc.directory=/var/protobuf_desc"
+    depends_on:
+      - "kafka"
+    volumes:
+      - type: bind
+        source: ./build/descriptors
+        target: /var/protobuf_desc

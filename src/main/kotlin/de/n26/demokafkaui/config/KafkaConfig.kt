@@ -1,7 +1,7 @@
 package de.n26.demokafkaui.config
 
+import de.n26.demokafkaui.event.CustomBaseEvent
 import de.n26.demokafkaui.producer.Producer
-import de.n26.demokafkaui.Transactions
 import de.n26.demokafkaui.protoserializer.KafkaProtoDeserializer
 import de.n26.demokafkaui.protoserializer.KafkaProtoSerializer
 import org.apache.kafka.clients.admin.NewTopic
@@ -13,11 +13,11 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
-import org.springframework.kafka.core.KafkaTemplate
+import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
-import org.springframework.kafka.core.ConsumerFactory
 
 @Configuration
 class KafkaConfig {
@@ -25,7 +25,7 @@ class KafkaConfig {
     @Bean
     fun producer(
         @Qualifier("transactionsTopic") topic: NewTopic,
-        template: KafkaTemplate<String, Transactions.userTransaction>
+        template: KafkaTemplate<String, CustomBaseEvent>
     ) = Producer(topic, template)
 
     @Bean(name = ["transactionsTopic"])
@@ -37,30 +37,30 @@ class KafkaConfig {
     @Bean
     fun producerFactory(
         kafkaProperties: KafkaProperties
-    ): ProducerFactory<String, Transactions.userTransaction> = DefaultKafkaProducerFactory(
+    ): ProducerFactory<String, CustomBaseEvent> = DefaultKafkaProducerFactory(
         kafkaProperties.buildProducerProperties(),
         StringSerializer(),
         KafkaProtoSerializer()
     )
 
     @Bean
-    fun kafkaTemplate(producerFactory: ProducerFactory<String, Transactions.userTransaction>) =
+    fun kafkaTemplate(producerFactory: ProducerFactory<String, CustomBaseEvent>) =
         KafkaTemplate(producerFactory)
 
     @Bean
     fun consumerFactory(
         kafkaProperties: KafkaProperties
-    ): ConsumerFactory<String?, Transactions.userTransaction?> = DefaultKafkaConsumerFactory(
+    ): ConsumerFactory<String?, CustomBaseEvent?> = DefaultKafkaConsumerFactory(
         kafkaProperties.buildConsumerProperties(),
         StringDeserializer(),
-        KafkaProtoDeserializer(Transactions.userTransaction.parser())
+        KafkaProtoDeserializer(CustomBaseEvent.parser())
     )
 
     @Bean
     fun kafkaListenerContainerFactory(
-        consumerFactory: ConsumerFactory<String, Transactions.userTransaction>
-    ): ConcurrentKafkaListenerContainerFactory<String, Transactions.userTransaction>? {
-        val factory = ConcurrentKafkaListenerContainerFactory<String, Transactions.userTransaction>()
+        consumerFactory: ConsumerFactory<String, CustomBaseEvent>
+    ): ConcurrentKafkaListenerContainerFactory<String, CustomBaseEvent>? {
+        val factory = ConcurrentKafkaListenerContainerFactory<String, CustomBaseEvent>()
         factory.consumerFactory = consumerFactory
         return factory
     }
