@@ -4,7 +4,9 @@ kafka:
     enabled: true
     mappings:
       - topicName: transactions
-        valueProtoType: de.n26.demokafkaui.event.CustomBaseEvent
+        valueProtoType: de.n26.demokafkaui.UserTransaction
+      - topicName: wrapped_transactions
+        valueProtoType: de.n26.demokafkaui.BaseEvent
     fileSystem:
       enabled: true
       refreshInterval: 5m

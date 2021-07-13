@@ -1,14 +1,12 @@
 package de.n26.demokafkaui.config
 
-import de.n26.demokafkaui.event.CustomBaseEvent
+import de.n26.demokafkaui.BaseEvent
+import de.n26.demokafkaui.UserTransaction
 import de.n26.demokafkaui.producer.Producer
 import de.n26.demokafkaui.protoserializer.KafkaProtoDeserializer
 import de.n26.demokafkaui.protoserializer.KafkaProtoSerializer
-import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
-import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -24,43 +22,50 @@ class KafkaConfig {
 
     @Bean
     fun producer(
-        @Qualifier("transactionsTopic") topic: NewTopic,
-        template: KafkaTemplate<String, CustomBaseEvent>
-    ) = Producer(topic, template)
-
-    @Bean(name = ["transactionsTopic"])
-    fun transactionsTopic(
-        @Value("\${topics.transactions.name}") name: String,
-        @Value("\${topics.transactions.partitions}") partitions: String,
-    ): NewTopic = NewTopic(name, partitions.toInt(), partitions.toShort())
+        wrappedTransactionsTemplate: KafkaTemplate<String, BaseEvent>,
+        transactionsTemplate: KafkaTemplate<String, UserTransaction>,
+    ) = Producer(wrappedTransactionsTemplate, transactionsTemplate)
 
     @Bean
-    fun producerFactory(
+    fun wrappedTransactionProducerFactory(
         kafkaProperties: KafkaProperties
-    ): ProducerFactory<String, CustomBaseEvent> = DefaultKafkaProducerFactory(
+    ): ProducerFactory<String, BaseEvent> = DefaultKafkaProducerFactory(
         kafkaProperties.buildProducerProperties(),
         StringSerializer(),
         KafkaProtoSerializer()
     )
 
     @Bean
-    fun kafkaTemplate(producerFactory: ProducerFactory<String, CustomBaseEvent>) =
+    fun wrappedTransactionTemplate(producerFactory: ProducerFactory<String, BaseEvent>) =
+        KafkaTemplate(producerFactory)
+
+    @Bean
+    fun transactionProducerFactory(
+        kafkaProperties: KafkaProperties
+    ): ProducerFactory<String, UserTransaction> = DefaultKafkaProducerFactory(
+        kafkaProperties.buildProducerProperties(),
+        StringSerializer(),
+        KafkaProtoSerializer()
+    )
+
+    @Bean
+    fun transactionTemplate(producerFactory: ProducerFactory<String, UserTransaction>) =
         KafkaTemplate(producerFactory)
 
     @Bean
     fun consumerFactory(
         kafkaProperties: KafkaProperties
-    ): ConsumerFactory<String?, CustomBaseEvent?> = DefaultKafkaConsumerFactory(
+    ): ConsumerFactory<String?, BaseEvent?> = DefaultKafkaConsumerFactory(
         kafkaProperties.buildConsumerProperties(),
         StringDeserializer(),
-        KafkaProtoDeserializer(CustomBaseEvent.parser())
+        KafkaProtoDeserializer(BaseEvent.parser())
     )
 
     @Bean
     fun kafkaListenerContainerFactory(
-        consumerFactory: ConsumerFactory<String, CustomBaseEvent>
-    ): ConcurrentKafkaListenerContainerFactory<String, CustomBaseEvent>? {
-        val factory = ConcurrentKafkaListenerContainerFactory<String, CustomBaseEvent>()
+        consumerFactory: ConsumerFactory<String, BaseEvent>
+    ): ConcurrentKafkaListenerContainerFactory<String, BaseEvent>? {
+        val factory = ConcurrentKafkaListenerContainerFactory<String, BaseEvent>()
         factory.consumerFactory = consumerFactory
         return factory
     }
