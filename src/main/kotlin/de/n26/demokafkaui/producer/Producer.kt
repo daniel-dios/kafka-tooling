@@ -12,7 +12,6 @@ import kotlin.random.Random.Default.nextInt
 
 class Producer(
     private val wrappedTransactionsTemplate: KafkaTemplate<String, BaseEvent>,
-    private val transactionsTemplate: KafkaTemplate<String, UserTransaction>,
 ) {
 
     @Scheduled(fixedDelay = 1000, initialDelay = 5000)
@@ -32,18 +31,6 @@ class Producer(
             .build()
 
         wrappedTransactionsTemplate.send("wrapped_transactions", event.eventId, event)
-    }
-
-    @Scheduled(fixedDelay = 1000, initialDelay = 5000)
-    fun sendTransaction() {
-        val userTransaction = UserTransaction
-            .newBuilder()
-            .setUserId(UUID.randomUUID().toString())
-            .setAt(Instant.now().toProtoTimestamp())
-            .setAmount(nextInt(-100, 100))
-            .build()
-
-        transactionsTemplate.send("transactions", userTransaction.userId, userTransaction)
     }
 
     private fun Instant.toProtoTimestamp() = Timestamp

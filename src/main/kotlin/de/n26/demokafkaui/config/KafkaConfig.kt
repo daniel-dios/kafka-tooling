@@ -23,8 +23,7 @@ class KafkaConfig {
     @Bean
     fun producer(
         wrappedTransactionsTemplate: KafkaTemplate<String, BaseEvent>,
-        transactionsTemplate: KafkaTemplate<String, UserTransaction>,
-    ) = Producer(wrappedTransactionsTemplate, transactionsTemplate)
+    ) = Producer(wrappedTransactionsTemplate)
 
     @Bean
     fun wrappedTransactionProducerFactory(
@@ -37,19 +36,6 @@ class KafkaConfig {
 
     @Bean
     fun wrappedTransactionTemplate(producerFactory: ProducerFactory<String, BaseEvent>) =
-        KafkaTemplate(producerFactory)
-
-    @Bean
-    fun transactionProducerFactory(
-        kafkaProperties: KafkaProperties
-    ): ProducerFactory<String, UserTransaction> = DefaultKafkaProducerFactory(
-        kafkaProperties.buildProducerProperties(),
-        StringSerializer(),
-        KafkaProtoSerializer()
-    )
-
-    @Bean
-    fun transactionTemplate(producerFactory: ProducerFactory<String, UserTransaction>) =
         KafkaTemplate(producerFactory)
 
     @Bean
