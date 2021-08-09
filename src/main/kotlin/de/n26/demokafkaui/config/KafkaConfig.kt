@@ -1,7 +1,6 @@
 package de.n26.demokafkaui.config
 
 import de.n26.demokafkaui.BaseEvent
-import de.n26.demokafkaui.UserTransaction
 import de.n26.demokafkaui.producer.Producer
 import de.n26.demokafkaui.protoserializer.KafkaProtoDeserializer
 import de.n26.demokafkaui.protoserializer.KafkaProtoSerializer
@@ -11,11 +10,7 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
-import org.springframework.kafka.core.ConsumerFactory
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory
-import org.springframework.kafka.core.DefaultKafkaProducerFactory
-import org.springframework.kafka.core.KafkaTemplate
-import org.springframework.kafka.core.ProducerFactory
+import org.springframework.kafka.core.*
 
 @Configuration
 class KafkaConfig {

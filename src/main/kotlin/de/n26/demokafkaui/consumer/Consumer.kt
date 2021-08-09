@@ -1,7 +1,6 @@
 package de.n26.demokafkaui.consumer
 
 import de.n26.demokafkaui.BaseEvent
-import de.n26.demokafkaui.Transactions
 import de.n26.demokafkaui.UserTransaction
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
